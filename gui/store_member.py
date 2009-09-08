@@ -14,12 +14,12 @@ from lib.member import Member
 class Window:
   """This class is used to show wineDlg"""
 	
-  def __init__(self, wine="", winery="", grape=""):
+  def __init__(self, glade_file, member = Member("","","")):
 	
     #setup the glade file
-		self.gladefile = "member.glade"
+		self.gladefile = "gui/member.glade"
 		#setup the wine that we will return
-		self.member = Member(wine,winery,grape)
+		self.member = member
 		
   def run(self):
     """This function will show the wineDlg"""	

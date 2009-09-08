@@ -3,7 +3,7 @@ import sys
 
 try:  
         import pygtk  
-        #pygtk.require("2.0")  
+        pygtk.require("2.0")  
 except:  
         pass  
 try:  
@@ -12,16 +12,18 @@ except:
         print("GTK Not Availible")
         sys.exit(1)
 
-from store_member import Add
+import store_member
 
 class Window:
 
-  def __init__(self):
+  def __init__(self, glade_file):
+
+    self.glade_file = glade_file
     member_properties = [
         "Firstname", "Lastname","email"]
   
     builder = gtk.Builder()
-    builder.add_from_file("member.glade")
+    builder.add_from_file(glade_file)
 
     signals = { 
         "on_buttonQuit_clicked" : self.quit,
@@ -38,6 +40,7 @@ class Window:
     
     self.main_window = builder.get_object("main_window")
     self.main_window.show()
+    gtk.main()
    
   def add_columns_to_tree_view(self, list_store, member_properties):
     """Add all of the List Columns to the member_tree_view"""
@@ -67,13 +70,12 @@ class Window:
     """Called when the use wants to add a wine"""
     #Cteate the dialog, show it, and store the results
 		
-    add_member_dialog = Store()
+    add_member_dialog = store_member.Window(self.glade_file)
     result,new_member = add_member_dialog.run()
 
     if (result == gtk.RESPONSE_OK):
-		#	"""The user clicked Ok, so let's add this
-		#	wine to the wine list"""
-		#	self.wineList.append(newWine.getList())
+      #	"""The user clicked Ok, so let's add this
+      #	member to the member list"""
       self.member_list.append(new_member.parameters_to_array())
 
 
