@@ -18,7 +18,7 @@ class Window:
 	
     #setup the glade file
 		self.gladefile = "gui/member.glade"
-		#setup the wine that we will return
+		#setup the member that we will return
 		self.member = member
 		
   def run(self):
