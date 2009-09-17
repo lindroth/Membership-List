@@ -13,6 +13,7 @@ except:
         sys.exit(1)
 
 import store_member
+from lib import db
 
 class Window:
 
@@ -37,7 +38,17 @@ class Window:
 	
     self.member_list = gtk.ListStore(str, str, str)
     self.member_tree_view.set_model(self.member_list)	
+
+    #Set up db connection.
+    self.db = db.Connection("db.sqlite")
+
+    #Get all members.
+    members = self.db.get_all_members()
     
+    #Add members to the list.
+    for member in members:
+      self.member_list.append(member.parameters_to_array())
+
     self.main_window = builder.get_object("main_window")
     self.main_window.show()
     gtk.main()
@@ -77,6 +88,7 @@ class Window:
       #	"""The user clicked Ok, so let's add this
       #	member to the member list"""
       self.member_list.append(new_member.parameters_to_array())
+      self.db.add_member(new_member)
 
 
   def quit(self, widget):
