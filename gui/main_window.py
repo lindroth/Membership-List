@@ -30,11 +30,12 @@ class Window:
         "on_buttonQuit_clicked" : self.quit,
         "on_window_destroy" : self.quit,
         "on_add_member" : self.on_add_member,
+        "on_edit_member" : self.on_edit_member,
     }
     builder.connect_signals(signals)
 
     self.member_tree_view = builder.get_object("memberview")
-    self.add_columns_to_tree_view(self.member_tree_view,member_properties)
+    self.add_columns_to_tree_view(self.member_tree_view, member_properties)
 	
     self.member_list = gtk.ListStore(str, str, str)
     self.member_tree_view.set_model(self.member_list)	
@@ -89,6 +90,22 @@ class Window:
       #	member to the member list"""
       self.member_list.append(new_member.parameters_to_array())
       self.db.add_member(new_member)
+
+
+  def on_edit_member(self, widget):
+    selection = self.member_tree_view.get_selection()
+    model, path = selection.get_selected()
+
+    if path:
+      value = model[path][0]
+      print(value)
+    #TODO
+    #Ok, now we have the row, lets create a Member object from the array
+    #and do an edit popup
+
+    #we need the id, can we store a hidden column in the tree view?
+    #Then we get the member from db with that id, send it to edit.
+    #don't forget to update the row.
 
 
   def quit(self, widget):

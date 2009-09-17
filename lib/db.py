@@ -6,26 +6,26 @@ from helpers import *
 class Connection():
   
   def __init__(self,db_file = None):
-    path = os.path.abspath(".")
-    file_path = os.path.join(path + "/db",db_file)
-
-    #Do we nead to create a new db?
-    if os.path.isfile(file_path):
-      db_file_exists = True
-    else:
-      db_file_exists = False
-
     if db_file:
-      self.connection = sqlite.connect(file_path)
+      self.connection = self._connect_with_file(db_file)
     else:
       self.connection = sqlite.connect(':memory:') 
  
     self.cursor = self.connection.cursor()
 
-    #If we didn't have an db file we need to set it up.
-    if not db_file_exists:
+
+  def _connect_with_file(self,db_file):
+    path = os.path.abspath(".")
+    file_path = os.path.join(path + "/db",db_file)
+
+    #Do we nead to create a new db?
+    if os.path.isfile(file_path):
+      return sqlite.connect(file_path)
+    else:
       debug_print("No db file found. Setting up db")
+      connection = sqlite.connect(file_path)
       self.setup()
+      return connection
 
 
   def setup(self):
@@ -39,7 +39,20 @@ class Connection():
     self.cursor.execute('INSERT INTO members VALUES (null,?,?,?)',
         (member.firstname, member.lastname, member.email) )
     self.connection.commit()
+  
+  def update_member(self, member):
+    self.cursor.execute('UPDATE members SET firstname = ?, lastname = ?, email = ? ' +
+        'WHERE id = ?',
+        (member.firstname, member.lastname, member.email, member.id) )
+    self.connection.commit()
 
+  def find_member_by_id(self, id):
+    self.cursor.execute('SELECT * FROM members WHERE id = ?', (id,))
+    rows = self.cursor.fetchone()
+    if rows:
+      return self._row_to_members(rows)
+    else:
+      return None
 
   def number_of_members(self):
     self.cursor.execute('SELECT * FROM members')
@@ -66,5 +79,8 @@ class Connection():
   def _rows_to_members(self, rows):
     members = []
     for row in rows:
-      members.append( Member(row[1],row[2], row[0]) )
+      members.append( Member(row[1],row[2], row[3], row[0] ))
     return members
+
+  def _row_to_members(self, row):
+    return Member(row[1],row[2], row[3], row[0] )
