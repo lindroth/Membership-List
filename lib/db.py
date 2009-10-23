@@ -5,6 +5,22 @@ from helpers import *
 
 class Connection():
   
+  # Table layout:
+  #
+  # id.
+  # card_no.
+  # payed.
+  # firstname.
+  # lastname.
+  # gender.
+  # birthdate
+  # street.
+  # postnr.
+  # post addr.
+  # mail addr.
+
+  # sample_id.
+
   def __init__(self,db_file = None):
     if db_file:
       self.connection = self._connect_with_file(db_file)
@@ -30,8 +46,20 @@ class Connection():
 
   def setup(self):
     self.cursor.execute('CREATE TABLE members ' + 
-        '( id INTEGER PRIMARY KEY, firstname VARCHAR(50), ' + 
-        'lastname VARCHAR(50), email VARCHAR(50))')
+        '( id INTEGER PRIMARY KEY,' + 
+        'card_no INTEGER,' +
+        'firstname VARCHAR(50), ' + 
+        'lastname VARCHAR(50), ' + 
+        'payed INTEGER,' +
+        'gender VARCHAR(50),' +
+        'birthdate VARCHAR(50),' +
+        'street VARCHAR(50),' +
+        'postnr INTEGER,' +
+        'post_addr,' +
+        'mail_addr,' +
+        'sample_id,' +
+        'email VARCHAR(50))')
+
     self.connection.commit()
 
 
