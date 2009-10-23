@@ -25,6 +25,8 @@ gtk.gdk.threads_init()
 class Window:
 
   def __init__(self, glade_file):
+    
+    self.readingcard = False
 
     self.glade_file = glade_file
     member_properties = [
@@ -124,21 +126,23 @@ class Window:
       #	member to the member list"""
       self.member_list.append(self.member_to_array(new_member))
 
-  def signal(self, input):
+  def reading_card_result(self, input):
     print input
-
-  def count_up(self, maximum):
-     for i in xrange(maximum):
-         fraction = (i + 1) / float(maximum)
-         print "vut " + str(fraction) 
-         time.sleep(5)
-         yield fraction
   
+  def card_found(self, cardnumber):
+    print cardnumber
+
   def on_start_stop_rfid_reader(self,widget):
     #test to start thread
-    Card(self.signal).start()
-    
-
+    if not self.readingcard:
+      print "Start"
+      self.readingcard = True
+      self.card = Card(self.reading_card_result, self.card_found)
+      self.card.start()
+    else:
+      print "stop"
+      self.card.stop()
+      self.readingcard = False
 
   def on_edit_member(self, widget):
     selection = self.member_tree_view.get_selection()
@@ -163,7 +167,6 @@ class Window:
     sys.exit(0)
 
 if __name__ == "__main__":
-  #gdk.threads_init()
   app = Member()
   gtk.main()
     

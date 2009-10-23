@@ -1,45 +1,36 @@
 import threading, thread
-from threading import Thread, Lock
-import gobject as gob
-from time import sleep, time
+import gobject, gtk
 
+from time import sleep
 
-class Card(Thread):
+class Card(object):
 
-  def __init__(self, answer_to):
-    print "created"
-    self.main_app = answer_to
-    self.ctrl = True
-    self.Running = False
-    self.lock = Lock()
-    self.lock.acquire()
-    Thread.__init__(self)
+   def __init__(self, loop_callback, complete_callback=None):
+       self.loop_callback = loop_callback
+       self.complete_callback = complete_callback
 
-  def run(self):
-    card_not_found = True
-    while card_not_found:
+   def _start(self, *args, **kwargs):
+       self._stopped = False
+       card_not_found = True
+       while card_not_found:
+          #read until card is found
+           if self._stopped:
+               thread.exit()
+           sleep(1) 
+           gobject.idle_add(self._loop, "Not found!")
+       if self.complete_callback is not None:
+           gobject.idle_add(self.complete_callback, 10000)
 
-      sleep(1)
-      gob.idle_add(self.main_app, 10000)
-      card_not_found = False
+   def _loop(self, ret):
+       if ret is None:
+           ret = ()
+       if not isinstance(ret, tuple):
+           ret = (ret,)
+       self.loop_callback(*ret)
 
-  def Start_Stop(self):
-    print "start"
-    if self.Running:
-      self.Running = False
-    else:
-      try:
-        self.lock.release()
-      except thread_error:
-        pass
+   def start(self, *args, **kwargs):
+       threading.Thread(target=self._start, args=args, kwargs=kwargs).start()
 
-  def Quit(self):
-    self.ctrl = False
-    if not self.Running:
-      released = False
-      while not released:
-        try:
-          self.lock.release()
-          released = True
-        except thread_error:
-          pass
+   def stop(self):
+       self._stopped = True
+
