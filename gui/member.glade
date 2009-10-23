@@ -188,7 +188,18 @@
               <placeholder/>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="button4">
+                <property name="label" translatable="yes">Start/Stop RFID reader</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_start_stop_rfid_reader"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">5</property>
+              </packing>
             </child>
           </object>
           <packing>

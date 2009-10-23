@@ -16,6 +16,7 @@ import store_member
 import edit_member
 from lib import rfid
 from lib.person import Person
+from lib.read_card import Card
 
 import time
 
@@ -48,6 +49,7 @@ class Window:
         "on_window_destroy" : self.quit,
         "on_add_member" : self.on_add_member,
         "on_edit_member" : self.on_edit_member,
+        "on_start_stop_rfid_reader" : self.on_start_stop_rfid_reader,
     }
     builder.connect_signals(signals)
 
@@ -115,7 +117,7 @@ class Window:
     #Cteate the dialog, show it, and store the results
 		
     add_member_dialog = store_member.Window(self.glade_file)
-    result,new_member = add_member_dialog.run(Person)
+    result,new_member = add_member_dialog.run()
 
     if (result == gtk.RESPONSE_OK):
       #	"""The user clicked Ok, so let's add this
@@ -132,9 +134,10 @@ class Window:
          time.sleep(5)
          yield fraction
   
-  def on_start_rfid_reader(self,widget):
+  def on_start_stop_rfid_reader(self,widget):
     #test to start thread
-    rfid.GeneratorTask(self.count_up, self.signal).start(5)
+    Card(self.signal).start()
+    
 
 
   def on_edit_member(self, widget):
@@ -143,17 +146,17 @@ class Window:
 
     if path:
       value = model[path][0]
-      print(value)
     
-    person_to_edit = Person.get(model[path][0])
+      person_to_edit = Person.get(model[path][0])
 
-    edit_member_dialog = edit_member.Window(self.glade_file)
-    result,new_member = edit_member_dialog.run(person_to_edit)
+      edit_member_dialog = edit_member.Window(self.glade_file)
+      result,new_member = edit_member_dialog.run(person_to_edit)
 
-    if (result == gtk.RESPONSE_OK):
-      #	The user clicked Ok, So I guess we should find the member and remove 
-      #him from the search list
-      self.member_list.append(self.member_to_array(new_member))
+      if (result == gtk.RESPONSE_OK):
+        #	The user clicked Ok, So I guess we should find the member and remove 
+        #him from the search list
+        self.member_list.remove(path)
+        self.member_list.append(self.member_to_array(new_member))
 
   def quit(self, widget):
     gtk.main_quit
