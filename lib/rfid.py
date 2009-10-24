@@ -5,7 +5,7 @@ import os
 
 class RFID:
 
-  error_codes = ["ER1!","ER2!","ER5!"]
+  error_codes = ["ER1!","ER2!","ER3!","ER4!","ER5!"]
 
 
   def __init__(self, serial_device):

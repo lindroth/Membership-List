@@ -120,15 +120,17 @@ class Window:
 
 
   def add_column(self,list_store, title, column_number):
-		"""This function adds a column to the list view.
-		First it create the gtk.TreeViewColumn and then set
-		some needed properties"""
+    """This function adds a column to the list view.
+    First it create the gtk.TreeViewColumn and then set
+    some needed properties"""
 						
-		column = gtk.TreeViewColumn(title, gtk.CellRendererText()
-			, text=column_number)
-		column.set_resizable(True)		
-		column.set_sort_column_id(column_number)
-		list_store.append_column(column)
+    column = gtk.TreeViewColumn(title, gtk.CellRendererText()
+      , text=column_number)
+    column.set_resizable(True)		
+    column.set_sort_column_id(column_number)
+    if(title == "id" or title == "Cardnumber"):
+      column.set_visible(False)
+    list_store.append_column(column)
 
 
   def on_search_button(self, widget):

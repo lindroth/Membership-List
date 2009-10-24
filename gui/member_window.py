@@ -9,7 +9,6 @@ except:
         print("GTK Not Availible")
         sys.exit(1)
 
-from lib.member import Member
 from lib.person import Person
 import time
 from lib.read_card import Card
