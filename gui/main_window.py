@@ -15,8 +15,7 @@ except:
 import store_member
 import edit_member
 from lib import rfid
-from lib.person import Person
-from lib.read_card import Card
+from lib.person import Personfrom lib.read_card import Card
 from sqlobject import AND
 
 import time
@@ -74,10 +73,12 @@ class Window:
     self.main_window = self.builder.get_object("main_window")
     self.main_window.show()
     gtk.main()
- 
+
+
   def show_all_members(self):
     members = Person.select()
     self.show_members(members)
+
 
   def show_members(self, members):
     self.member_list.clear()
@@ -105,6 +106,7 @@ class Window:
         gender_string
         ]
 
+
   def add_columns_to_tree_view(self, list_store, member_properties):
     """Add all of the List Columns to the member_tree_view"""
     column_number = 0
@@ -126,12 +128,12 @@ class Window:
 
 
   def on_find(self, widget):
-
     firstname = self.builder.get_object("firstname_search_entry").get_text()
     lastname = self.builder.get_object("lastname_search_entry").get_text()
     members = Person.select(AND(Person.q.firstname.startswith(firstname),
       Person.q.lastname.startswith(lastname)))
     self.show_members(members)
+
 
   def on_window_destroy(self, widget, data=None ):
     gtk.main_quit()
@@ -161,11 +163,14 @@ class Window:
     else:
       Person.delete(new_member.id)
 
+
   def reading_card_result(self, input):
     print input
-  
+
+
   def card_found(self, cardnumber):
     print cardnumber
+
 
   def on_start_stop_rfid_reader(self,widget):
     #test to start thread
@@ -178,6 +183,7 @@ class Window:
       print "stop"
       self.card.stop()
       self.readingcard = False
+
 
   def on_edit_member(self, widget):
     selection = self.member_tree_view.get_selection()
@@ -196,6 +202,7 @@ class Window:
         #him from the search list
         self.member_list.remove(path)
         self.member_list.append(self.member_to_array(new_member))
+
 
   def quit(self, widget):
     gtk.main_quit

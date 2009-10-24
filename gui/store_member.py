@@ -14,10 +14,12 @@ from lib.person import Person
 
 class Window:
   """This class is used to show wineDlg"""
-	
+
+
   def __init__(self, glade_file):
     #setup the glade file
     self.gladefile = "gui/member.glade"
+
 
   def run(self):
     builder = gtk.Builder()

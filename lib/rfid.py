@@ -5,8 +5,10 @@ import os
 
 class RFID:
 
+
   def __init__(self, serial_device):
     self.serial = serial.Serial(serial_device, 9600, timeout = 2)
+
 
   def read(self):
     while(True):
@@ -17,8 +19,10 @@ class RFID:
         kortnummer = x[25:32]
       return kortnummer
 
+
   def write(self,inputstring):
     pass
+
 
   def stop(self):
     self.serial.close()

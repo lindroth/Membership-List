@@ -20,7 +20,8 @@ class Window:
 	
     #setup the glade file
 		self.gladefile = "gui/member.glade"
-	
+
+
   def run(self, person):
     builder = gtk.Builder()
     builder.add_from_file(self.gladefile)
