@@ -10,8 +10,7 @@ class Person(SQLObject):
   gender = BoolCol()
   birthdate = StringCol()
   streetname = StringCol()
-  zipcode = StringCol()
-  city = StringCol()
+  post_address = StringCol()
   email = StringCol()
   sample = StringCol() 
   

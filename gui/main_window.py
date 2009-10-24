@@ -7,7 +7,8 @@ try:
 except:  
         pass  
 try:  
-        import gtk  
+        import gtk
+        import gobject
 except:  
         print("GTK Not Availible")
         sys.exit(1)
@@ -37,8 +38,7 @@ class Window:
         "Birtdate",
         "Payed",
         "email",
-        "Streetname",
-        "Zipcode",
+        "Post Address",
         "City",
         "Cardnumber",
         "Gender",
@@ -54,15 +54,16 @@ class Window:
         "on_add_member" : self.on_add_member,
         "on_edit_member" : self.on_edit_member,
         "on_start_stop_rfid_reader" : self.on_start_stop_rfid_reader,
-        "on_find" : self.on_find,
+        "on_find" : self.on_search_button,
         "on_delete_member" : self.on_delete_member,
+        "on_card_found" : self.on_card_found,
     }
     self.builder.connect_signals(signals)
 
     self.member_tree_view = self.builder.get_object("memberview")
     self.add_columns_to_tree_view(self.member_tree_view, member_properties)
 	
-    self.member_list = gtk.ListStore(str, str, str, str, str, str, str,
+    self.member_list = gtk.ListStore(str, str, str, str, str, str,
         str, str, str, str )
     self.member_tree_view.set_model(self.member_list)	
 
@@ -101,8 +102,7 @@ class Window:
         member.payed, 
         member.email,
         member.streetname,
-        member.zipcode,
-        member.city,
+        member.post_address,
         member.cardnumber,
         gender_string
         ]
@@ -128,7 +128,7 @@ class Window:
 		list_store.append_column(column)
 
 
-  def on_find(self, widget):
+  def on_search_button(self, widget):
     firstname = self.builder.get_object("firstname_search_entry").get_text()
     lastname = self.builder.get_object("lastname_search_entry").get_text()
     members = Person.select(AND(Person.q.firstname.startswith(firstname),
@@ -169,8 +169,18 @@ class Window:
     print input
 
 
-  def card_found(self, cardnumber):
-    print cardnumber
+  def on_card_found(self, cardnumber):
+    person_found = Person.select(Person.q.cardnumber == cardnumber)
+    person_list = list(person_found)
+    if len(person_list):
+      print "Member found :" + str(person_list[0].id)
+      import pprint
+      gobject.idle_add(self.start_edit_dialoge,person_list[0])
+      print "leaving"
+      #self.member_tree_view.emit("on_card_found", person_list[0])
+      #self.start_edit_dialoge(person_list[0])
+    else:
+      print "No Member with cardnumber : " + cardnumber
 
 
   def on_start_stop_rfid_reader(self,widget):
@@ -178,13 +188,31 @@ class Window:
     if not self.readingcard:
       print "Start"
       self.readingcard = True
-      self.card = Card(self.reading_card_result, self.card_found)
+      self.card = Card(self.reading_card_result, self.on_card_found)
       self.card.start()
     else:
       print "stop"
       self.card.stop()
       self.readingcard = False
 
+  
+  def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
+    edit_member_dialog = edit_member.Window(self.glade_file)
+    result,new_member = edit_member_dialog.run(person_to_edit)
+
+    if (result == gtk.RESPONSE_OK):
+      #	The user clicked Ok, So I guess we should find the member and remove 
+      #him from the search list
+      print "Back"
+      if(place_in_tree_view):
+        self.member_list.remove(place_in_tree_view)
+        self.member_list.append(self.member_to_array(new_member))
+    if(self.readingcard):
+      #The edit field poped up due to that we found a member. 
+      #Start the reader again.
+      self.card.start()
+      
+    gtk.main()
 
   def on_edit_member(self, widget):
     selection = self.member_tree_view.get_selection()
@@ -192,17 +220,8 @@ class Window:
 
     if path:
       value = model[path][0]
-    
       person_to_edit = Person.get(model[path][0])
-
-      edit_member_dialog = edit_member.Window(self.glade_file)
-      result,new_member = edit_member_dialog.run(person_to_edit)
-
-      if (result == gtk.RESPONSE_OK):
-        #	The user clicked Ok, So I guess we should find the member and remove 
-        #him from the search list
-        self.member_list.remove(path)
-        self.member_list.append(self.member_to_array(new_member))
+      self.start_edit_dialoge(person_to_edit, path)
 
 
   def quit(self, widget):

@@ -34,8 +34,7 @@ class Window:
     email_entry = builder.get_object("email_entry")
     birthdate_entry = builder.get_object("birtdate_entry")
     streetname_entry = builder.get_object("streetname_entry")
-    zipcode_entry = builder.get_object("zipcode_entry")
-    city_entry = builder.get_object("city_entry")
+    post_address_entry = builder.get_object("post_address_entry")
     cardnumber_entry = builder.get_object("cardnumber_entry")
     gender = builder.get_object("radiobutton_male")
     payed_entry = builder.get_object("checkbutton_payed")
@@ -52,8 +51,7 @@ class Window:
         email = email_entry.get_text(),
         birthdate = birthdate_entry.get_text(),
         streetname = streetname_entry.get_text(),
-        zipcode = zipcode_entry.get_text(),
-        city = city_entry.get_text(),
+        post_address = post_address_entry.get_text(),
         cardnumber = cardnumber_entry.get_text(),
         gender = gender.get_active(),
         payed = payed_entry.get_active(),
