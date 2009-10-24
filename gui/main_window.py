@@ -174,6 +174,11 @@ class Window:
 
 
   def reading_card_result(self, input):
+    label = self.builder.get_object("reading_card_label")
+    if(label.get_label() == "reading"):
+      label.set_label("")
+    else:
+      label.set_label("reading")
     print input
 
 
@@ -185,22 +190,24 @@ class Window:
       print "Member found :" + str(person_list[0].id)
       import pprint
       gobject.idle_add(self.start_edit_dialoge,person_list[0])
-      print "leaving"
-      #self.member_tree_view.emit("on_card_found", person_list[0])
-      #self.start_edit_dialoge(person_list[0])
     else:
       print "No Member with cardnumber : " + cardnumber
 
 
   def on_start_stop_rfid_reader(self,widget):
+
+    label = self.builder.get_object("reading_card_label")
+
     #test to start thread
     button = self.builder.get_object("start_stop_button")
     if not self.readingcard:
       print "Start"
+      label.set_label("")
       button.set_label("Stop RFID reader")
       self.readingcard = True
       self.card.start()
     else:
+      label.set_label("reading")
       print "Stop"
       button.set_label("Start RFID reader")
       self.card.stop()
