@@ -200,7 +200,7 @@
               <placeholder/>
             </child>
             <child>
-              <object class="GtkButton" id="button4">
+              <object class="GtkButton" id="start_stop_button">
                 <property name="label" translatable="yes">Start/Stop RFID reader</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -561,15 +561,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkButton" id="button1">
                 <property name="label" translatable="yes">Associate new Card</property>
                 <property name="visible">True</property>
@@ -583,6 +574,15 @@
                 <property name="top_attach">9</property>
                 <property name="bottom_attach">10</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>

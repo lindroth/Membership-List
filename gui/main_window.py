@@ -176,6 +176,7 @@ class Window:
 
 
   def on_card_found(self, cardnumber):
+    #self.card.stop()
     person_found = Person.select(Person.q.cardnumber == cardnumber)
     person_list = list(person_found)
     if len(person_list):
@@ -191,12 +192,15 @@ class Window:
 
   def on_start_stop_rfid_reader(self,widget):
     #test to start thread
+    button = self.builder.get_object("start_stop_button")
     if not self.readingcard:
       print "Start"
+      button.set_label("Stop RFID reader")
       self.readingcard = True
       self.card.start()
     else:
-      print "stop"
+      print "Stop"
+      button.set_label("Start RFID reader")
       self.card.stop()
       self.readingcard = False
 
