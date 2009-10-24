@@ -21,7 +21,7 @@ class Card(object):
           cardnumber = self.rfid.read_once()
           if self._stopped:
                thread.exit()
-          sleep(0.5) 
+          sleep(0.1) 
           gobject.idle_add(self._loop, "No Card found!")
        if self.complete_callback is not None:
            gobject.idle_add(self.complete_callback, cardnumber)

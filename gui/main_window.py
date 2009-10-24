@@ -13,8 +13,10 @@ except:
         print("GTK Not Availible")
         sys.exit(1)
 
-import store_member
-import edit_member
+#import store_member
+#import edit_member
+import member_window
+
 from lib import rfid
 from lib.person import Person
 from lib.read_card import Card
@@ -29,6 +31,7 @@ class Window:
   def __init__(self, glade_file):
     
     self.readingcard = False
+    self.card = Card(self.reading_card_result, self.on_card_found)
 
     self.glade_file = glade_file
     member_properties = [
@@ -151,10 +154,10 @@ class Window:
     
 
   def on_add_member(self, widget):
-    """Called when the use wants to add a wine"""
     #Cteate the dialog, show it, and store the results
+    self.card.stop()
 		
-    add_member_dialog = store_member.Window(self.glade_file)
+    add_member_dialog = member_window.Window(self.glade_file)
     result,new_member = add_member_dialog.run()
 
     if (result == gtk.RESPONSE_OK):
@@ -163,6 +166,9 @@ class Window:
       self.member_list.append(self.member_to_array(new_member))
     else:
       Person.delete(new_member.id)
+
+    if(self.readingcard):
+      self.card.start()
 
 
   def reading_card_result(self, input):
@@ -188,7 +194,6 @@ class Window:
     if not self.readingcard:
       print "Start"
       self.readingcard = True
-      self.card = Card(self.reading_card_result, self.on_card_found)
       self.card.start()
     else:
       print "stop"
@@ -197,7 +202,8 @@ class Window:
 
   
   def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
-    edit_member_dialog = edit_member.Window(self.glade_file)
+    self.card.stop()
+    edit_member_dialog = member_window.Window(self.glade_file)
     result,new_member = edit_member_dialog.run(person_to_edit)
 
     if (result == gtk.RESPONSE_OK):
@@ -208,8 +214,6 @@ class Window:
         self.member_list.remove(place_in_tree_view)
         self.member_list.append(self.member_to_array(new_member))
     if(self.readingcard):
-      #The edit field poped up due to that we found a member. 
-      #Start the reader again.
       self.card.start()
       
     gtk.main()
