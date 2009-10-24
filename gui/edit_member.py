@@ -21,28 +21,10 @@ class Window:
     #setup the glade file
 		self.gladefile = "gui/member.glade"
 	
-  def quit(self):
-    self.store_member.destroy()
-
-  def validate_date(self):
-    try:
-      print "check"
-      time.strptime(birthdate_entry.get_text(), '%Y-%m-%d')
-    except ValueError:
-      print "Failed"
-      birthdate_entry.set_text("Not valid date YYYY-MM-DD")
-
   def run(self, person):
     builder = gtk.Builder()
     builder.add_from_file(self.gladefile)
 
-    signals = { 
-        "on_cancle" : self.quit,
-        "on_window_destroy" : self.quit,
-        "validate_date" : self.validate_date,
-    }
-
-    builder.connect_signals(signals)
 		#Get the actual dialog widget
     self.store_member = builder.get_object("store_member")
 
