@@ -15,7 +15,8 @@ except:
 import store_member
 import edit_member
 from lib import rfid
-from lib.person import Personfrom lib.read_card import Card
+from lib.person import Person
+from lib.read_card import Card
 from sqlobject import AND
 
 import time
