@@ -8,7 +8,7 @@ class Person(SQLObject):
   cardnumber = StringCol()
   payed = BoolCol()
   gender = BoolCol()
-  birthdate = DateCol()
+  birthdate = StringCol()
   streetname = StringCol()
   zipcode = StringCol()
   city = StringCol()

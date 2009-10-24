@@ -19,7 +19,7 @@ class Window:
 	
     #setup the glade file
 		self.gladefile = "gui/member.glade"
-		
+  
   def run(self):
     builder = gtk.Builder()
     builder.add_from_file(self.gladefile)
@@ -36,11 +36,13 @@ class Window:
     zipcode_entry = builder.get_object("zipcode_entry")
     city_entry = builder.get_object("city_entry")
     cardnumber_entry = builder.get_object("cardnumber_entry")
-    gender_entry = builder.get_object("gender_entry")
-    payed_entry = builder.get_object("payed_entry")
+    gender = builder.get_object("radiobutton_male")
+    payed_entry = builder.get_object("checkbutton_payed")
 
 		#run the dialog and store the response		
     self.result = self.store_member.run()
+
+    #gender
 
     #get the value of the entry fields
     new_person = Person(
@@ -52,8 +54,8 @@ class Window:
         zipcode = zipcode_entry.get_text(),
         city = city_entry.get_text(),
         cardnumber = cardnumber_entry.get_text(),
-        gender = gender_entry.get_text(),
-        payed = payed_entry.get_text(),
+        gender = gender.get_active(),
+        payed = payed_entry.get_active(),
         sample = None
         )
 

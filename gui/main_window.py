@@ -76,6 +76,11 @@ class Window:
     gtk.main()
   
   def member_to_array(self, member):
+    if member.gender:
+      gender_string = "Male"
+    else:
+      gender_string = "Female"
+
     return [
         member.id,
         member.firstname, 
@@ -87,7 +92,7 @@ class Window:
         member.zipcode,
         member.city,
         member.cardnumber,
-        member.gender,
+        gender_string
         ]
 
   def add_columns_to_tree_view(self, list_store, member_properties):
