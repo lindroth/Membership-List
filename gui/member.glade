@@ -4,6 +4,9 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Membership List</property>
+    <property name="window_position">center</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
     <signal name="destroy" handler="on_window_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -349,6 +352,7 @@
               <object class="GtkTreeView" id="memberview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="rubber_banding">True</property>
                 <signal name="row_activated" handler="on_row_activated"/>
               </object>
             </child>
@@ -372,7 +376,7 @@
   </object>
   <object class="GtkDialog" id="store_member">
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Store a member</property>
+    <property name="title" translatable="yes">Member Information</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -586,7 +590,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
-                <property name="text" translatable="yes">YYYY-MM-DD</property>
+                <property name="text" translatable="yes">YYMMDD</property>
                 <property name="overwrite_mode">True</property>
               </object>
               <packing>

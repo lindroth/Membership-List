@@ -19,8 +19,8 @@ class Window:
   def __init__(self, glade_file):
 	
     #setup the glade file
-		self.gladefile = "gui/member.glade"
-
+    self.gladefile = "gui/member.glade"
+ 
   def on_associate_new_card(self, widget):
     card = Card(self.reading_card_result, self.on_card_found)
     card.start()
@@ -73,7 +73,13 @@ class Window:
         print "Set active F"
         radio_female.set_active(False)
       
+      if(not person.payed):
+        self.store_member.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("red"))
+      else:
+        self.store_member.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("green"))
       payed.set_active(person.payed)
+      
+      
 
 
 		#run the dialog.

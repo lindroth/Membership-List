@@ -66,6 +66,7 @@ class Window:
     self.builder.connect_signals(signals)
 
     self.member_tree_view = self.builder.get_object("memberview")
+
     self.add_columns_to_tree_view(self.member_tree_view, member_properties)
 	
     self.member_list = gtk.ListStore(str, str, str, str, str, str,
