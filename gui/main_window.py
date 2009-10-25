@@ -3,7 +3,7 @@ import sys
 
 try:  
         import pygtk  
-        pygtk.require("2.0")  
+        pygtk.require("2.4")  
 except:  
         pass  
 try:  
@@ -13,8 +13,6 @@ except:
         print("GTK Not Availible")
         sys.exit(1)
 
-#import store_member
-#import edit_member
 import member_window
 
 from lib import rfid
@@ -31,7 +29,11 @@ class Window:
   def __init__(self, glade_file):
     
     self.readingcard = False
-    self.card = Card(self.reading_card_result, self.on_card_found)
+    try:
+      self.card = Card(self.reading_card_result, self.on_card_found)
+    except:
+      #Show popup, no rfid reader.
+      self.card = None
 
     self.glade_file = glade_file
     member_properties = [
@@ -66,6 +68,7 @@ class Window:
     self.builder.connect_signals(signals)
 
     self.member_tree_view = self.builder.get_object("memberview")
+    self.member_tree_view.set_rules_hint(True)
 
     self.add_columns_to_tree_view(self.member_tree_view, member_properties)
 	
