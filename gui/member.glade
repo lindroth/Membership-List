@@ -270,6 +270,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -293,6 +294,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -302,9 +304,11 @@
             </child>
             <child>
               <object class="GtkButton" id="find_button">
-                <property name="label" translatable="yes">Find</property>
+                <property name="label" translatable="yes">Search</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <signal name="clicked" handler="on_find"/>
               </object>
@@ -312,6 +316,20 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">3</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="clear_search_button">
+                <property name="label" translatable="yes">Clear Search</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_clear_search"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -339,7 +357,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStatusbar" id="statusbar2">
+          <object class="GtkStatusbar" id="statusbar">
             <property name="visible">True</property>
             <property name="spacing">2</property>
           </object>
@@ -519,6 +537,7 @@
                     <property name="receives_default">False</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="group">radiobutton_female</property>
                   </object>
                   <packing>
                     <property name="position">0</property>

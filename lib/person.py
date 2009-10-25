@@ -1,5 +1,5 @@
 from sqlobject import *
-path = "/home/gny/Develop/eatingbits/membership_list/db/"
+path = "/home/matti/membership_list/db/"
 sqlhub.processConnection = connectionForURI('sqlite:///'+ path +'new.db')
 
 class Person(SQLObject):

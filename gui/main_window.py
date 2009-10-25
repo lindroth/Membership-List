@@ -60,6 +60,7 @@ class Window:
         "on_find" : self.on_search_button,
         "on_delete_member" : self.on_delete_member,
         "on_card_found" : self.on_card_found,
+        "on_clear_search" : self.on_clear_search,
     }
     self.builder.connect_signals(signals)
 
@@ -146,14 +147,20 @@ class Window:
 
   
   def on_delete_member(self, widget):
-    selection = self.member_tree_view.get_selection()
-    model, path = selection.get_selected()
+    pass
+    #selection = self.member_tree_view.get_selection()
+    #model, path = selection.get_selected()
 
-    if path:
-      person_id = model[path][0]
-      self.member_list.remove(path)
-      Person.delete(person_id)
+    #if path:
+    #  person_id = model[path][0]
+    #  self.member_list.remove(path)
+    #  Person.delete(person_id)
     
+
+  def on_clear_search(self, widget):
+    self.builder.get_object("firstname_search_entry").set_text("")
+    self.builder.get_object("lastname_search_entry").set_text("")
+    self.show_all_members()
 
   def on_add_member(self, widget):
     #Cteate the dialog, show it, and store the results
@@ -197,16 +204,19 @@ class Window:
   def on_start_stop_rfid_reader(self,widget):
 
     label = self.builder.get_object("reading_card_label")
+    statusbar = self.builder.get_object("statusbar")
 
     #test to start thread
     button = self.builder.get_object("start_stop_button")
     if not self.readingcard:
+      statusbar.push(1,"reading")
       print "Start"
       label.set_label("")
       button.set_label("Stop RFID reader")
       self.readingcard = True
       self.card.start()
     else:
+      statusbar.pop(1)
       label.set_label("reading")
       print "Stop"
       button.set_label("Start RFID reader")

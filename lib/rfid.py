@@ -10,6 +10,7 @@ class RFID:
 
   def __init__(self, serial_device):
     self.serial = serial.Serial(serial_device, 9600, timeout = 2)
+    #self.serial = serial.Serial(timeout = 2)
 
   
   def read_once(self):

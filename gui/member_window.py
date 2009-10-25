@@ -52,7 +52,8 @@ class Window:
     streetname_entry = self.builder.get_object("streetname_entry")
     post_address_entry = self.builder.get_object("post_address_entry")
     cardnumber_entry = self.builder.get_object("cardnumber_entry")
-    gender = self.builder.get_object("radiobutton_male")
+    radio_male = self.builder.get_object("radiobutton_male")
+    radio_female = self.builder.get_object("radiobutton_female")
     payed = self.builder.get_object("checkbutton_payed")
     
     if(person):
@@ -63,8 +64,15 @@ class Window:
       streetname_entry.set_text(person.streetname)
       post_address_entry.set_text(person.post_address)
       cardnumber_entry.set_text(person.cardnumber)
-
-      gender.set_active(person.gender)
+     
+      print "JASDSADSAD:" + str(person.gender)
+      if(person.gender):
+        print "Set active M"
+        radio_male.set_active(True)
+      else:
+        print "Set active F"
+        radio_female.set_active(False)
+      
       payed.set_active(person.payed)
 
 
@@ -79,7 +87,7 @@ class Window:
       person.streetname = streetname_entry.get_text()
       person.post_address = post_address_entry.get_text()
       person.cardnumber = cardnumber_entry.get_text()
-      person.gender = gender.get_active()
+      person.gender = radio_male.get_active()
       person.payed = payed.get_active()
       person.sample = None
     else:
@@ -91,7 +99,7 @@ class Window:
           streetname = streetname_entry.get_text(),
           post_address = post_address_entry.get_text(),
           cardnumber = cardnumber_entry.get_text(),
-          gender = gender.get_active(),
+          gender = radio_male.get_active(),
           payed = payed.get_active(),
           sample = None
           )
