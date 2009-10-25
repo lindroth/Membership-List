@@ -61,6 +61,7 @@ class Window:
         "on_delete_member" : self.on_delete_member,
         "on_card_found" : self.on_card_found,
         "on_clear_search" : self.on_clear_search,
+        "on_row_activated" : self.on_edit_member,
     }
     self.builder.connect_signals(signals)
 
@@ -241,12 +242,11 @@ class Window:
       
     gtk.main()
 
-  def on_edit_member(self, widget):
+  def on_edit_member(self, widget, path = None, view_column = None):
     selection = self.member_tree_view.get_selection()
     model, path = selection.get_selected()
 
     if path:
-      value = model[path][0]
       person_to_edit = Person.get(model[path][0])
       self.start_edit_dialoge(person_to_edit, path)
 

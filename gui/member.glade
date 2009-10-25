@@ -349,6 +349,7 @@
               <object class="GtkTreeView" id="memberview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <signal name="row_activated" handler="on_row_activated"/>
               </object>
             </child>
           </object>
