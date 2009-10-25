@@ -64,6 +64,7 @@ class Window:
         "on_card_found" : self.on_card_found,
         "on_clear_search" : self.on_clear_search,
         "on_row_activated" : self.on_edit_member,
+        "on_changed" : self.on_search_button,
     }
     self.builder.connect_signals(signals)
 

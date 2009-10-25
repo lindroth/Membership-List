@@ -274,6 +274,7 @@
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
                 <property name="activates_default">True</property>
+                <signal name="changed" handler="on_changed"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -298,6 +299,7 @@
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
                 <property name="activates_default">True</property>
+                <signal name="changed" handler="on_changed"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -352,7 +354,6 @@
               <object class="GtkTreeView" id="memberview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="rubber_banding">True</property>
                 <signal name="row_activated" handler="on_row_activated"/>
               </object>
             </child>
