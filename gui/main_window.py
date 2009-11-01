@@ -20,6 +20,7 @@ from lib.person import Person
 from lib.read_card import Card
 from sqlobject import AND
 
+import os
 import time
 
 gtk.gdk.threads_init()
@@ -36,18 +37,6 @@ class Window:
       self.card = None
 
     self.glade_file = glade_file
-    member_properties = [
-        "id",
-        "Firstname", 
-        "Lastname",
-        "Birtdate",
-        "Payed",
-        "email",
-        "Post Address",
-        "City",
-        "Cardnumber",
-        "Gender",
-        ]
   
     self.builder = gtk.Builder()
     self.builder.add_from_file(glade_file)
@@ -71,13 +60,16 @@ class Window:
     self.member_tree_view = self.builder.get_object("memberview")
     self.member_tree_view.set_rules_hint(True)
 
-    self.add_columns_to_tree_view(self.member_tree_view, member_properties)
+    self.add_columns_to_tree_view(self.member_tree_view, Person)
 	
     self.member_list = gtk.ListStore(str, str, str, str, str, str,
         str, str, str, str )
     self.member_tree_view.set_model(self.member_list)	
 
     #Set up db connection.
+    dirname = "db" 
+    if not os.path.isdir("./" + dirname + "/"):
+      os.mkdir("./" + dirname + "/")
     Person.createTable(ifNotExists=True)
     
     self.show_all_members()
@@ -95,49 +87,21 @@ class Window:
   def show_members(self, members):
     self.member_list.clear()
     for member in members:
-      self.member_list.append(self.member_to_array(member) )
+      self.member_list.append(member.to_array() )
 
 
-  def member_to_array(self, member):
-    if member.gender:
-      gender_string = "Male"
-    else:
-      gender_string = "Female"
-
-    return [
-        member.id,
-        member.firstname, 
-        member.lastname, 
-        member.birthdate,
-        member.payed, 
-        member.email,
-        member.streetname,
-        member.post_address,
-        member.cardnumber,
-        gender_string
-        ]
-
-
-  def add_columns_to_tree_view(self, list_store, member_properties):
+  def add_columns_to_tree_view(self, tree_view, person):
     """Add all of the List Columns to the member_tree_view"""
     column_number = 0
-    for column_name in member_properties:
-      self.add_column(list_store, column_name, column_number)
+    for column_name in person.property_names:
+      column = gtk.TreeViewColumn(column_name, gtk.CellRendererText(), text=column_number)
+      column.set_resizable(True)		
+
+      if(column_name in person.hidden_properties):
+        column.set_visible(False)
+      
+      tree_view.append_column(column)
       column_number += 1
-
-
-  def add_column(self,list_store, title, column_number):
-    """This function adds a column to the list view.
-    First it create the gtk.TreeViewColumn and then set
-    some needed properties"""
-						
-    column = gtk.TreeViewColumn(title, gtk.CellRendererText()
-      , text=column_number)
-    column.set_resizable(True)		
-    column.set_sort_column_id(column_number)
-    if(title == "id" or title == "Cardnumber"):
-      column.set_visible(False)
-    list_store.append_column(column)
 
 
   def on_search_button(self, widget):
@@ -170,7 +134,8 @@ class Window:
 
   def on_add_member(self, widget):
     #Cteate the dialog, show it, and store the results
-    self.card.stop()
+    if self.card:
+      self.card.stop()
 		
     add_member_dialog = member_window.Window(self.glade_file)
     result,new_member = add_member_dialog.run()
@@ -178,11 +143,11 @@ class Window:
     if (result == gtk.RESPONSE_OK):
       #	"""The user clicked Ok, so let's add this
       #	member to the member list"""
-      self.member_list.append(self.member_to_array(new_member))
+      self.member_list.append(new_member.to_array())
     else:
       Person.delete(new_member.id)
 
-    if(self.readingcard):
+    if(self.card and self.readingcard):
       self.card.start()
 
 
@@ -208,6 +173,8 @@ class Window:
 
 
   def on_start_stop_rfid_reader(self,widget):
+    if not self.card:
+      return
 
     label = self.builder.get_object("reading_card_label")
     statusbar = self.builder.get_object("statusbar")
@@ -231,7 +198,8 @@ class Window:
 
   
   def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
-    self.card.stop()
+    if self.card:
+      self.card.stop()
     edit_member_dialog = member_window.Window(self.glade_file)
     result,new_member = edit_member_dialog.run(person_to_edit)
 
@@ -241,8 +209,8 @@ class Window:
       print "Back"
       if(place_in_tree_view):
         self.member_list.remove(place_in_tree_view)
-        self.member_list.append(self.member_to_array(new_member))
-    if(self.readingcard):
+        self.member_list.append(self.new_member.to_array())
+    if(self.card and self.readingcard):
       self.card.start()
       
     gtk.main()
