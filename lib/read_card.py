@@ -14,12 +14,12 @@ class Card(object):
 
 
    def _start(self, *args, **kwargs):
-       self._stopped = False
+       self.stopped = False
        cardnumber = None
        while not cardnumber:
           #read until card is found
           cardnumber = self.rfid.read_once()
-          if self._stopped:
+          if self.stopped:
                thread.exit()
           sleep(0.1) 
           gobject.idle_add(self._loop, "No Card found!")
@@ -40,5 +40,5 @@ class Card(object):
 
 
    def stop(self):
-       self._stopped = True
+       self.stopped = True
 

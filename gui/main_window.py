@@ -29,7 +29,9 @@ class Window:
 
   def __init__(self, glade_file):
     
-    self.readingcard = False
+    db_dir = "db"
+    Person.init_db(db_dir)
+
     try:
       self.card = Card(self.reading_card_result, self.on_card_found)
     except:
@@ -61,16 +63,10 @@ class Window:
     self.member_tree_view.set_rules_hint(True)
 
     self.add_columns_to_tree_view(self.member_tree_view, Person)
-	
-    self.member_list = gtk.ListStore(str, str, str, str, str, str,
-        str, str, str, str )
-    self.member_tree_view.set_model(self.member_list)	
 
-    #Set up db connection.
-    dirname = "db" 
-    if not os.path.isdir("./" + dirname + "/"):
-      os.mkdir("./" + dirname + "/")
-    Person.createTable(ifNotExists=True)
+    # The * is used to expand the tuple in to arguments for the function.
+    self.member_list = gtk.ListStore(*Person.get_column_types())
+    self.member_tree_view.set_model(self.member_list)	
     
     self.show_all_members()
 
@@ -147,7 +143,7 @@ class Window:
     else:
       Person.delete(new_member.id)
 
-    if(self.card and self.readingcard):
+    if(self.card and not self.card.stopped):
       self.card.start()
 
 
@@ -181,12 +177,11 @@ class Window:
 
     #test to start thread
     button = self.builder.get_object("start_stop_button")
-    if not self.readingcard:
+    if self.card.stopped:
       statusbar.push(1,"reading")
       print "Start"
       label.set_label("")
       button.set_label("Stop RFID reader")
-      self.readingcard = True
       self.card.start()
     else:
       statusbar.pop(1)
@@ -194,7 +189,6 @@ class Window:
       print "Stop"
       button.set_label("Start RFID reader")
       self.card.stop()
-      self.readingcard = False
 
   
   def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
@@ -210,7 +204,7 @@ class Window:
       if(place_in_tree_view):
         self.member_list.remove(place_in_tree_view)
         self.member_list.append(self.new_member.to_array())
-    if(self.card and self.readingcard):
+    if(self.card and not self.card.stopped):
       self.card.start()
       
     gtk.main()
@@ -231,4 +225,3 @@ class Window:
 if __name__ == "__main__":
   app = Member()
   gtk.main()
-    

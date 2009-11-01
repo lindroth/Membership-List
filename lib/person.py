@@ -5,6 +5,7 @@ path =  os.path.abspath(".") + "/db/"
 sqlhub.processConnection = connectionForURI('sqlite:///'+ path +'new.db')
 
 class Person(SQLObject):
+
   firstname = StringCol()
   lastname = StringCol()
   cardnumber = StringCol()
@@ -16,7 +17,6 @@ class Person(SQLObject):
   email = StringCol()
   sample = StringCol() 
   
-
   property_names = [
       "id",
       "Firstname", 
@@ -34,7 +34,20 @@ class Person(SQLObject):
       "id",
       "Cardnumber"
       ]
+  
+  column_types = (str, str, str, str, str, str,
+        str, str, str, str )
 
+  @staticmethod
+  def init_db(dirname):
+    if not os.path.isdir("./" + dirname + "/"):
+      os.mkdir("./" + dirname + "/")
+    Person.createTable(ifNotExists=True)
+
+  @staticmethod
+  def get_column_types():
+    return Person.column_types
+    
   def to_array(self):
     if self.gender:
       gender_string = "Male"
