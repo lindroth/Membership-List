@@ -12,16 +12,16 @@ Person.createTable(ifNotExists=True)
 
 for line in open(filename,'r'):
     line = line.split(",")
-    
+
     if "0" in line[2]:
-      gender = False
+        gender = False
     else:
-      gender = True
+        gender = True
 
     if "1" in line[0]:
-      payed = True
+        payed = True
     else:
-      payed = False
+        payed = False
 
     Person(firstname = line[1],
         lastname = line[3],
