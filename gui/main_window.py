@@ -146,7 +146,7 @@ class Window:
 
         if(self.card and not self.card.stopped):
             self.card.start()
-    
+
     def reading_card_result(self, input):
         label = self.builder.get_object("reading_card_label")
         if(label.get_label() == "reading"):
@@ -171,6 +171,7 @@ class Window:
 
     def on_start_stop_rfid_reader(self,widget):
         if not self.card:
+            print("No card reader")
             return
 
         label = self.builder.get_object("reading_card_label")
@@ -199,8 +200,9 @@ class Window:
         result,new_member = edit_member_dialog.run(person_to_edit)
 
         if (result == gtk.RESPONSE_OK):
-            # The user clicked Ok, So I guess we should find the member and remove
-            #him from the search list
+            # The user clicked Ok,
+            # So I guess we should find the member and remove
+            # him from the search list
             print "Back"
             if(place_in_tree_view):
                 self.member_list.remove(place_in_tree_view)
