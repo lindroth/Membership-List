@@ -74,7 +74,6 @@ class Window:
             post_address_entry.set_text(self.person.post_address)
             cardnumber_entry.set_text(self.person.cardnumber)
 
-            print "JASDSADSAD:" + str(self.person.gender)
             if(self.person.gender):
                 print "Set active M"
                 radio_male.set_active(True)
@@ -106,7 +105,7 @@ class Window:
             self.person.payed = payed.get_active()
             self.person.sample = None
         else:
-            self.person = person(
+            self.person = Person(
                 firstname = firstname_entry.get_text(),
                 lastname = lastname_entry.get_text(),
                 email = email_entry.get_text(),

@@ -36,10 +36,12 @@ class Window:
         try:
             self.card = Card(self.reading_card_result, self.on_card_found)
         except:
+            print "No reader found"
             #Show popup, no rfid reader.
             self.card = None
 
         self.glade_file = glade_file
+        self.blink = False
 
         self.builder = gtk.Builder()
         self.builder.add_from_file(glade_file)
@@ -149,10 +151,15 @@ class Window:
 
     def reading_card_result(self, input):
         label = self.builder.get_object("reading_card_label")
-        if(label.get_label() == "reading"):
-            label.set_label("")
+        statusbar = self.builder.get_object("statusbar")
+        if(self.blink):
+            self.blink = False
+            statusbar.push(1,"reading")
+            #label.set_label("")
         else:
-            label.set_label("reading")
+            self.blink = True
+            statusbar.pop(1)
+            #label.set_label("reading")
         print input
 
 
@@ -161,9 +168,8 @@ class Window:
         person_found = Person.select(Person.q.cardnumber == cardnumber)
         person_list = list(person_found)
         if len(person_list):
-            person_list[0].swipe_on()
+            person_list[0].swipe_now()
             print "Member found :" + str(person_list[0].id)
-            import pprint
             gobject.idle_add(self.start_edit_dialoge,person_list[0])
         else:
             print "No Member with cardnumber : " + cardnumber
@@ -174,7 +180,6 @@ class Window:
             print("No card reader")
             return
 
-        label = self.builder.get_object("reading_card_label")
         statusbar = self.builder.get_object("statusbar")
 
         #test to start thread
@@ -182,12 +187,10 @@ class Window:
         if self.card.stopped:
             statusbar.push(1,"reading")
             print "Start"
-            label.set_label("")
             button.set_label("Stop RFID reader")
             self.card.start()
         else:
             statusbar.pop(1)
-            label.set_label("reading")
             print "Stop"
             button.set_label("Start RFID reader")
             self.card.stop()
@@ -203,7 +206,6 @@ class Window:
             # The user clicked Ok,
             # So I guess we should find the member and remove
             # him from the search list
-            print "Back"
             if(place_in_tree_view):
                 self.member_list.remove(place_in_tree_view)
                 self.member_list.append(self.new_member.to_array())

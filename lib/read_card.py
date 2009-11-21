@@ -8,6 +8,7 @@ class Card(object):
 
 
     def __init__(self, loop_callback, complete_callback=None):
+        self.stopped = True
         self.loop_callback = loop_callback
         self.complete_callback = complete_callback
         self.rfid = RFID("/dev/ttyUSB0")
