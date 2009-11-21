@@ -14,7 +14,6 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
-            <property name="visible">True</property>
             <child>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
@@ -205,11 +204,12 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-no</property>
+                <property name="stock_id">gtk-media-play</property>
                 <signal name="clicked" handler="on_start_stop_rfid_reader"/>
               </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
           </object>
@@ -248,6 +248,7 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <property name="activates_default">True</property>
+                        <property name="primary_icon_stock">gtk-find</property>
                         <signal name="changed" handler="on_changed"/>
                       </object>
                       <packing>
@@ -274,6 +275,7 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <property name="activates_default">True</property>
+                        <property name="primary_icon_stock">gtk-find</property>
                         <signal name="changed" handler="on_changed"/>
                       </object>
                       <packing>
@@ -285,7 +287,6 @@
                     <child>
                       <object class="GtkButton" id="find_button">
                         <property name="label">gtk-find</property>
-                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
                         <property name="has_default">True</property>

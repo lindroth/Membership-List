@@ -88,9 +88,6 @@ class Window:
             payed.set_active(self.person.payed)
 
 
-
-
-                    #run the dialog.
         self.result = self.store_member.run()
 
         if(self.person):
