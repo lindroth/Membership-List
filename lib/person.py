@@ -1,4 +1,10 @@
-from sqlobject import *
+import sys
+try:
+    from sqlobject import *
+except:
+    print("Sqlobject Not Available")
+    sys.exit(1)
+    
 from lib.swipe import Swipe
 import os
 import datetime
