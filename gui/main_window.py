@@ -106,9 +106,7 @@ class Window:
     def on_search_button(self, widget):
         firstname = self.builder.get_object("firstname_search_entry").get_text()
         lastname = self.builder.get_object("lastname_search_entry").get_text()
-        #TODO Move this in to Person
-        members = Person.select(AND(Person.q.firstname.startswith(firstname),
-          Person.q.lastname.startswith(lastname)))
+        members = Person.get_by_name(firstname,lastname)
         self.show_members(members)
 
 

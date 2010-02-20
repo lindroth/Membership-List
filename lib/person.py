@@ -59,9 +59,16 @@ class Person(SQLObject):
         return Person.column_types
   
     def swipe_now(self):
-      time_now = datetime.datetime.now()
-      Swipe(person = self, date = time_now)
+        time_now = datetime.datetime.now()
+        Swipe(person = self, date = time_now)
 
+    @staticmethod
+    def get_by_name(firstname, lastname):
+        return Person.select(
+            AND(
+                Person.q.firstname.startswith(firstname),
+                Person.q.lastname.startswith(lastname)))
+        
     def to_array(self):
         if self.gender:
             gender_string = "Male"
