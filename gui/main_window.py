@@ -16,7 +16,6 @@ except:
 
 import member_window
 
-from lib import rfid
 from lib.person import Person
 from lib.read_card import Card
 from sqlobject import AND
