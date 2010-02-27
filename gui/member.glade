@@ -179,8 +179,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton1">
+              <object class="GtkToolButton" id="remove">
                 <property name="visible">True</property>
+                <property name="label" translatable="yes">toolbutton3</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-remove</property>
+                <signal name="clicked" handler="on_delete_member"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -188,11 +192,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="remove">
+              <object class="GtkSeparatorToolItem" id="toolbutton1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">toolbutton3</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-remove</property>
               </object>
               <packing>
                 <property name="expand">False</property>
