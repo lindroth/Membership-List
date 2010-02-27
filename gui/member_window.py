@@ -20,9 +20,10 @@ class Window:
     """This class is used to show wineDlg"""
 
     def __init__(self, glade_file):
-
         #setup the glade file
-        self.gladefile = "gui/member.glade"
+        gladefile = "gui/member.glade"
+        self.builder = gtk.Builder()
+        self.builder.add_from_file(gladefile)
 
     def on_associate_new_card(self, widget):
         card = Card(self.reading_card_result, self.on_card_found)
@@ -43,8 +44,6 @@ class Window:
 
     def run(self, person = None):
         self.person = person
-        self.builder = gtk.Builder()
-        self.builder.add_from_file(self.gladefile)
 
         signals = {
             "on_associate_new_card" : self.on_associate_new_card,
@@ -52,10 +51,9 @@ class Window:
         }
 
         self.builder.connect_signals(signals)
-                    #Get the actual dialog widget
         self.store_member = self.builder.get_object("store_member")
 
-                    #Get all of the Entry Widgets and set their text
+        #Get all of the Entry Widgets and set their text
         firstname_entry = self.builder.get_object("firstname_entry")
         lastname_entry = self.builder.get_object("lastname_entry")
         email_entry = self.builder.get_object("email_entry")
@@ -93,30 +91,20 @@ class Window:
         self.result = self.store_member.run()
 
         if(self.result == gtk.RESPONSE_OK):
-            if(self.person):
-                self.person.firstname = firstname_entry.get_text()
-                self.person.lastname = lastname_entry.get_text()
-                self.person.email = email_entry.get_text()
-                self.person.birthdate = birthdate_entry.get_text()
-                self.person.streetname = streetname_entry.get_text()
-                self.person.post_address = post_address_entry.get_text()
-                self.person.cardnumber = cardnumber_entry.get_text()
-                self.person.gender = radio_male.get_active()
-                self.person.payed = payed.get_active()
-                self.person.sample = None
-            else:
-                self.person = Person(
-                    firstname = firstname_entry.get_text(),
-                    lastname = lastname_entry.get_text(),
-                    email = email_entry.get_text(),
-                    birthdate = birthdate_entry.get_text(),
-                    streetname = streetname_entry.get_text(),
-                    post_address = post_address_entry.get_text(),
-                    cardnumber = cardnumber_entry.get_text(),
-                    gender = radio_male.get_active(),
-                    payed = payed.get_active(),
-                    sample = None
-                    )
+            #If this is on add and not edit we need to create a person
+            if(not self.person):
+                self.person = Person()
+
+            self.person.firstname = firstname_entry.get_text()
+            self.person.lastname = lastname_entry.get_text()
+            self.person.email = email_entry.get_text()
+            self.person.birthdate = birthdate_entry.get_text()
+            self.person.streetname = streetname_entry.get_text()
+            self.person.post_address = post_address_entry.get_text()
+            self.person.cardnumber = cardnumber_entry.get_text()
+            self.person.gender = radio_male.get_active()
+            self.person.payed = payed.get_active()
+            self.person.sample = None
 
         self.store_member.destroy()
 
