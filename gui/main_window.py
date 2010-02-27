@@ -114,15 +114,21 @@ class Window:
 
 
     def on_delete_member(self, widget):
-        #TODO popup do you realy want to delete member etc ..
-        pass
-        #selection = self.member_tree_view.get_selection()
-        #model, path = selection.get_selected()
+        dialog = gtk.MessageDialog(self.main_window, gtk.DIALOG_DESTROY_WITH_PARENT,
+                                   gtk.MESSAGE_QUESTION,
+                                   gtk.BUTTONS_OK_CANCEL,
+                                   "Do you really want to delete this person?")
+        result = dialog.run()
+        dialog.destroy()
 
-        #if path:
-        #  person_id = model[path][0]
-        #  self.member_list.remove(path)
-        #  Person.delete(person_id)
+        if(result == gtk.RESPONSE_OK):
+            selection = self.member_tree_view.get_selection()
+            model, path = selection.get_selected()
+
+            if path:
+              person_id = model[path][0]
+              self.member_list.remove(path)
+              Person.delete(person_id)
 
 
     def on_clear_search(self, widget):
