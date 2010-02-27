@@ -53,7 +53,6 @@ class Window:
         self.builder.connect_signals(signals)
         self.store_member = self.builder.get_object("store_member")
 
-        #Get all of the Entry Widgets and set their text
         firstname_entry = self.builder.get_object("firstname_entry")
         lastname_entry = self.builder.get_object("lastname_entry")
         email_entry = self.builder.get_object("email_entry")
@@ -66,6 +65,7 @@ class Window:
         payed = self.builder.get_object("checkbutton_payed")
 
         if(self.person):
+            #This is an edit, set the fields
             firstname_entry.set_text(self.person.firstname)
             lastname_entry.set_text(self.person.lastname)
             email_entry.set_text(self.person.email)

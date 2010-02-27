@@ -36,7 +36,12 @@ class Window:
             self.card = Card(self.reading_card_result, self.on_card_found)
         except:
             print "No reader found"
-            #TODO Show popup, no rfid reader.
+            dialog = gtk.MessageDialog(None, gtk.DIALOG_DESTROY_WITH_PARENT,
+                                   gtk.MESSAGE_WARNING,
+                                   gtk.BUTTONS_OK,
+                                   "No RFID reader found")
+            result = dialog.run()
+            dialog.destroy()
             self.card = None
 
         self.glade_file = glade_file
