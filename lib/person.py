@@ -58,7 +58,7 @@ class Person(SQLObject):
     def get_column_types():
         return Person.column_types
   
-    def swipe_now(self):
+    def add_date(self):
         time_now = datetime.datetime.now()
         Swipe(person = self, date = time_now)
 

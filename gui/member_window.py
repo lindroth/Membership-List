@@ -17,10 +17,7 @@ from lib.read_card import Card
 import datetime
 
 class Window:
-    """This class is used to show wineDlg"""
-
     def __init__(self, glade_file):
-        #setup the glade file
         gladefile = "gui/member.glade"
         self.builder = gtk.Builder()
         self.builder.add_from_file(gladefile)
@@ -35,7 +32,7 @@ class Window:
 
     def on_manual_swipe(self, widget):
       if(self.person):
-        self.person.swipe_now()
+        self.person.add_date()
       print "Added date to person" 
 
 
