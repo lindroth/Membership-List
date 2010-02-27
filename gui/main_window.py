@@ -36,7 +36,7 @@ class Window:
             self.card = Card(self.reading_card_result, self.on_card_found)
         except:
             print "No reader found"
-            #Show popup, no rfid reader.
+            #TODO Show popup, no rfid reader.
             self.card = None
 
         self.glade_file = glade_file
@@ -114,6 +114,7 @@ class Window:
 
 
     def on_delete_member(self, widget):
+        #TODO popup do you realy want to delete member etc ..
         pass
         #selection = self.member_tree_view.get_selection()
         #model, path = selection.get_selected()
@@ -129,23 +130,33 @@ class Window:
         self.builder.get_object("lastname_search_entry").set_text("")
         self.show_all_members()
 
+
+    def on_edit_member(self, widget, path = None, view_column = None):
+        selection = self.member_tree_view.get_selection()
+        model, path = selection.get_selected()
+
+        if path:
+            person_to_edit = Person.get(model[path][0])
+            self.start_edit_dialoge(person_to_edit, path)
+
+
     def on_add_member(self, widget):
-        #Cteate the dialog, show it, and store the results
-        if self.card:
-            self.card.stop()
+        self.start_edit_dialoge(None)
 
-        add_member_dialog = member_window.Window(self.glade_file)
-        result,new_member = add_member_dialog.run()
 
-        if (result == gtk.RESPONSE_OK):
-            # """The user clicked Ok, so let's add this
-            # member to the member list"""
-            self.member_list.append(new_member.to_array())
-        else:
-            Person.delete(new_member.id)
+    def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
+           if self.card:
+               self.card.stop()
 
-        if(self.card and not self.card.stopped):
-            self.card.start()
+           add_edit_dialoge = member_window.Window(self.glade_file)
+           result,new_member = add_edit_dialoge.run(person_to_edit)
+
+           if (result == gtk.RESPONSE_OK and new_member):
+               self.show_members([new_member])
+
+           if(self.card and not self.card.stopped):
+               self.card.start()
+
 
     def reading_card_result(self, input):
         label = self.builder.get_object("reading_card_label")
@@ -162,9 +173,8 @@ class Window:
 
 
     def on_card_found(self, cardnumber):
-        #self.card.stop()
-        person_found = Person.select(Person.q.cardnumber == cardnumber)
-        person_list = list(person_found)
+        person = Person.get_by_cardnumber(cardnumber)
+        person_list = list(person)
         if len(person_list):
             person_list[0].swipe_now()
             print "Member found :" + str(person_list[0].id)
@@ -180,7 +190,6 @@ class Window:
 
         statusbar = self.builder.get_object("statusbar")
 
-        #test to start thread
         button = self.builder.get_object("start_stop_button")
         if self.card.stopped:
             statusbar.push(1,"reading")
@@ -194,37 +203,8 @@ class Window:
             self.card.stop()
 
 
-    def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
-        if self.card:
-            self.card.stop()
-        edit_member_dialog = member_window.Window(self.glade_file)
-        result,new_member = edit_member_dialog.run(person_to_edit)
-
-        if (result == gtk.RESPONSE_OK):
-            # The user clicked Ok,
-            # So I guess we should find the member and remove
-            # him from the search list
-            if(place_in_tree_view):
-                self.member_list.remove(place_in_tree_view)
-                self.member_list.append(self.new_member.to_array())
-        if(self.card and not self.card.stopped):
-            self.card.start()
-
-        gtk.main()
-
-    def on_edit_member(self, widget, path = None, view_column = None):
-        selection = self.member_tree_view.get_selection()
-        model, path = selection.get_selected()
-
-        if path:
-            person_to_edit = Person.get(model[path][0])
-            self.start_edit_dialoge(person_to_edit, path)
 
 
     def quit(self, widget):
         gtk.main_quit
         sys.exit(0)
-
-if __name__ == "__main__":
-    app = Member()
-    gtk.main()

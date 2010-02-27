@@ -68,7 +68,11 @@ class Person(SQLObject):
             AND(
                 Person.q.firstname.startswith(firstname),
                 Person.q.lastname.startswith(lastname)))
-        
+
+    @staticmethod
+    def get_by_cardnumber(number):
+        return Person.select(Person.q.cardnumber == cardnumber)
+
     def to_array(self):
         if self.gender:
             gender_string = "Male"

@@ -1,3 +1,5 @@
+import sys
+
 try:
     import pygtk
     pygtk.require("2.0")
@@ -90,33 +92,32 @@ class Window:
 
         self.result = self.store_member.run()
 
-        if(self.person):
-            self.person.firstname = firstname_entry.get_text()
-            self.person.lastname = lastname_entry.get_text()
-            self.person.email = email_entry.get_text()
-            self.person.birthdate = birthdate_entry.get_text()
-            self.person.streetname = streetname_entry.get_text()
-            self.person.post_address = post_address_entry.get_text()
-            self.person.cardnumber = cardnumber_entry.get_text()
-            self.person.gender = radio_male.get_active()
-            self.person.payed = payed.get_active()
-            self.person.sample = None
-        else:
-            self.person = Person(
-                firstname = firstname_entry.get_text(),
-                lastname = lastname_entry.get_text(),
-                email = email_entry.get_text(),
-                birthdate = birthdate_entry.get_text(),
-                streetname = streetname_entry.get_text(),
-                post_address = post_address_entry.get_text(),
-                cardnumber = cardnumber_entry.get_text(),
-                gender = radio_male.get_active(),
-                payed = payed.get_active(),
-                sample = None
-                )
+        if(self.result == gtk.RESPONSE_OK):
+            if(self.person):
+                self.person.firstname = firstname_entry.get_text()
+                self.person.lastname = lastname_entry.get_text()
+                self.person.email = email_entry.get_text()
+                self.person.birthdate = birthdate_entry.get_text()
+                self.person.streetname = streetname_entry.get_text()
+                self.person.post_address = post_address_entry.get_text()
+                self.person.cardnumber = cardnumber_entry.get_text()
+                self.person.gender = radio_male.get_active()
+                self.person.payed = payed.get_active()
+                self.person.sample = None
+            else:
+                self.person = Person(
+                    firstname = firstname_entry.get_text(),
+                    lastname = lastname_entry.get_text(),
+                    email = email_entry.get_text(),
+                    birthdate = birthdate_entry.get_text(),
+                    streetname = streetname_entry.get_text(),
+                    post_address = post_address_entry.get_text(),
+                    cardnumber = cardnumber_entry.get_text(),
+                    gender = radio_male.get_active(),
+                    payed = payed.get_active(),
+                    sample = None
+                    )
 
-                    #we are done with the dialog, destory it
         self.store_member.destroy()
 
-                    #return the result and the wine
         return self.result,self.person
