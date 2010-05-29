@@ -19,6 +19,9 @@ class RFID:
         if card_number in RFID.error_codes:
             return None
         else:
+            card_number = card_number.rstrip("\!")
+            card_number = card_number.lstrip("CBAB666")
+            card_number = card_number.lstrip("0")            
             return card_number
 
 
@@ -33,7 +36,9 @@ class RFID:
 
     def write(self,inputstring):
         x = "ER1!"
-        self.serial.write("Db0106" + inputstring)
+        inputstring = inputstring.zfill(25)
+        inputstring = "CBAB666" + inputstring
+        self.serial.write("Db0106" + inputstring + "!")
         x = self.serial.readline(eol="!")
         return x
 
