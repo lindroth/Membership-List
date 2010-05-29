@@ -34,7 +34,6 @@ class Window:
 
         try:
             self.card = Card(self.reading_card_result, self.on_card_found)
-            self.card.start()
         except:
             print "No reader found"
             dialog = gtk.MessageDialog(None, gtk.DIALOG_DESTROY_WITH_PARENT,
@@ -81,7 +80,14 @@ class Window:
         self.main_window = self.builder.get_object("main_window")
 
         self.show_all_members()
-        
+
+        #Last words, start state. ugly and for the love of god remove this
+        self.card.start()
+        button = self.builder.get_object("start_stop_button")
+        image = gtk.image_new_from_icon_name("gtk-media-stop", gtk.ICON_SIZE_BUTTON)
+        image.show()
+        button.set_icon_widget(image)
+
         self.main_window.show()
         gtk.main()
 
@@ -208,11 +214,17 @@ class Window:
         if self.card.stopped:
             print "Start"
             button.set_label("Stop RFID reader")
+            image = gtk.image_new_from_icon_name(gtk.STOCK_MEDIA_STOP, gtk.ICON_SIZE_BUTTON)
+            image.show()
+            button.set_icon_widget(image)
             self.card.start()
         else:
             self.statusbar.pop(1)
             print "Stop"
             button.set_label("Start RFID reader")
+            image = gtk.image_new_from_icon_name("gtk-media-record", gtk.ICON_SIZE_BUTTON)
+            image.show()
+            button.set_icon_widget(image)
             self.card.stop()
 
 
