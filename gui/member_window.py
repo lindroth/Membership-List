@@ -38,10 +38,10 @@ class Window:
 
     def reading_card_result(self, foo):
         print "No card found!"
+        # self.run()
 
     def run(self, person = None):
         self.person = person
-
         signals = {
             "on_associate_new_card" : self.on_associate_new_card,
             "on_manual_swipe" : self.on_manual_swipe,

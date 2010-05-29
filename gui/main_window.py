@@ -23,7 +23,7 @@ from sqlobject import AND
 import os
 import time
 
-gtk.gdk.threads_init()
+gobject.threads_init()
 
 class Window:
 
@@ -156,17 +156,20 @@ class Window:
 
 
     def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
-           if self.card:
-               self.card.stop()
+        is_reading = False
 
-           add_edit_dialoge = member_window.Window(self.glade_file)
-           result,new_member = add_edit_dialoge.run(person_to_edit)
+        if self.card and not self.card.stopped:
+            is_reading = True
+            self.card.stop()
 
-           if (result == gtk.RESPONSE_OK and new_member):
-               self.show_members([new_member])
+        add_edit_dialoge = member_window.Window(self.glade_file)
+        result,new_member = add_edit_dialoge.run(person_to_edit)
 
-           if(self.card and not self.card.stopped):
-               self.card.start()
+        if (result == gtk.RESPONSE_OK and new_member):
+            self.show_members([new_member])
+        
+        if(is_reading):
+            self.card.start()
 
 
     def reading_card_result(self, input):
@@ -187,9 +190,9 @@ class Window:
         person = Person.get_by_cardnumber(cardnumber)
         person_list = list(person)
         if len(person_list):
-            person_list[0].swipe_now()
+            person_list[0].add_date()
             print "Member found :" + str(person_list[0].id)
-            gobject.idle_add(self.start_edit_dialoge,person_list[0])
+            gobject.idle_add(self.start_edit_dialoge, person_list[0])
         else:
             print "No Member with cardnumber : " + cardnumber
 
