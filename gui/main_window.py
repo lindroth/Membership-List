@@ -216,5 +216,6 @@ class Window:
 
 
     def quit(self, widget):
+        self.card.stop()
         gtk.main_quit
         sys.exit(0)

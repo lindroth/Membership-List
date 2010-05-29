@@ -39,7 +39,7 @@ class Window:
         dialog = gtk.MessageDialog(self.store_member, gtk.DIALOG_DESTROY_WITH_PARENT,
                                    gtk.MESSAGE_INFO,
                                    gtk.BUTTONS_CANCEL,
-                                   "Looking for Card")
+                                   "Feed me a blank card infidel")
 
         card = Card(self.reading_card_result, self.on_card_found)
         card.write(self.builder.get_object("cardnumber_entry").get_text(), dialog)
@@ -47,8 +47,7 @@ class Window:
         result = dialog.run()
         dialog.destroy()
 
-        if(result == gtk.RESPONSE_CANCEL):
-            card.stop()
+        card.stop()
 
 
     def reading_card_result(self, foo):

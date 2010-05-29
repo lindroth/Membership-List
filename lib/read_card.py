@@ -26,6 +26,7 @@ class Card(object):
             gobject.idle_add(self._loop, "No Card found!")
         if self.complete_callback is not None:
             gobject.idle_add(self.complete_callback, cardnumber)
+        thread.exit()
 
             
     def _write(self, cardnumber, dialog = None):
