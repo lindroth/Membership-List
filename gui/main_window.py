@@ -34,6 +34,7 @@ class Window:
 
         try:
             self.card = Card(self.reading_card_result, self.on_card_found)
+            self.card.start()
         except:
             print "No reader found"
             dialog = gtk.MessageDialog(None, gtk.DIALOG_DESTROY_WITH_PARENT,
