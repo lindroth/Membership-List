@@ -31,13 +31,11 @@ class RFID:
                 kortnummer = x[25:32]
             return kortnummer
 
-
     def write(self,inputstring):
-	x = "ER1!"
-	self.serial.write("Db0106" + inputstring + "!")
-	x = self.serial.readline(eol="!")
-        pass
-
+        x = "ER1!"
+        self.serial.write("Db0106" + inputstring)
+        x = self.serial.readline(eol="!")
+        return x
 
     def stop(self):
         self.serial.close()

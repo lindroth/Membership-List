@@ -27,6 +27,19 @@ class Card(object):
         if self.complete_callback is not None:
             gobject.idle_add(self.complete_callback, cardnumber)
 
+            
+    def _write(self, cardnumber, dialog = None):
+        self.stopped = False
+        card_write_result = None
+        while(card_write_result != "DONE!"):
+            card_write_result = self.rfid.write(cardnumber)
+            if self.stopped:
+                thread.exit()
+            sleep(0.1)
+
+        dialog.destroy()
+        thread.exit()
+
 
     def _loop(self, ret):
         if ret is None:
@@ -36,8 +49,13 @@ class Card(object):
         self.loop_callback(*ret)
 
 
+    #TODO Change name to read
     def start(self, *args, **kwargs):
         threading.Thread(target=self._start, args=args, kwargs=kwargs).start()
+
+
+    def write(self, cardnumber, dialog = None):
+        threading.Thread(target=self._write, args=(cardnumber, dialog)).start()
 
 
     def stop(self):

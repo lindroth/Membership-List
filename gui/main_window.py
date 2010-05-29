@@ -77,10 +77,10 @@ class Window:
 
         #Class variables
         self.statusbar = self.builder.get_object("statusbar")
+        self.main_window = self.builder.get_object("main_window")
 
         self.show_all_members()
-
-        self.main_window = self.builder.get_object("main_window")
+        
         self.main_window.show()
         gtk.main()
 
@@ -195,6 +195,7 @@ class Window:
             gobject.idle_add(self.start_edit_dialoge, person_list[0])
         else:
             print "No Member with cardnumber : " + cardnumber
+            #TODO Start card reader again.
 
 
     def on_start_stop_rfid_reader(self,widget):

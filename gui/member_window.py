@@ -35,16 +35,31 @@ class Window:
         self.person.add_date()
       print "Added date to person" 
 
+    def on_lost_card(self, widget):
+        dialog = gtk.MessageDialog(self.store_member, gtk.DIALOG_DESTROY_WITH_PARENT,
+                                   gtk.MESSAGE_INFO,
+                                   gtk.BUTTONS_CANCEL,
+                                   "Looking for Card")
+
+        card = Card(self.reading_card_result, self.on_card_found)
+        card.write(self.builder.get_object("cardnumber_entry").get_text(), dialog)
+
+        result = dialog.run()
+        dialog.destroy()
+
+        if(result == gtk.RESPONSE_CANCEL):
+            card.stop()
+
 
     def reading_card_result(self, foo):
         print "No card found!"
-        # self.run()
 
     def run(self, person = None):
         self.person = person
         signals = {
             "on_associate_new_card" : self.on_associate_new_card,
             "on_manual_swipe" : self.on_manual_swipe,
+            "on_lost_card" : self.on_lost_card,
         }
 
         self.builder.connect_signals(signals)

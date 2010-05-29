@@ -11,7 +11,6 @@
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkMenuBar" id="menubar1">
             <child>
@@ -226,7 +225,6 @@
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
@@ -356,7 +354,6 @@
             <child>
               <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCalendar" id="calendar1">
                     <property name="visible">True</property>
@@ -436,12 +433,11 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkTable" id="table1">
             <property name="visible">True</property>
-            <property name="n_rows">11</property>
+            <property name="n_rows">12</property>
             <property name="n_columns">2</property>
             <child>
               <object class="GtkLabel" id="firstname_label">
@@ -680,8 +676,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">10</property>
-                <property name="bottom_attach">11</property>
+                <property name="top_attach">11</property>
+                <property name="bottom_attach">12</property>
               </packing>
             </child>
             <child>
@@ -695,6 +691,24 @@
             </child>
             <child>
               <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkButton" id="lost_card">
+                <property name="label" translatable="yes">Lost Card</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_lost_card"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">10</property>
+                <property name="bottom_attach">11</property>
+              </packing>
             </child>
           </object>
           <packing>
