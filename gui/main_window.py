@@ -23,7 +23,7 @@ from sqlobject import AND
 import os
 import time
 
-gtk.gdk.threads_init()
+gobject.threads_init()
 
 class Window:
 
@@ -74,6 +74,9 @@ class Window:
         # The * is used to expand the tuple in to arguments for the function.
         self.member_list = gtk.ListStore(*Person.get_column_types())
         self.member_tree_view.set_model(self.member_list)
+
+        #Class variables
+        self.statusbar = self.builder.get_object("statusbar")
 
         self.show_all_members()
 
@@ -156,40 +159,40 @@ class Window:
 
 
     def start_edit_dialoge(self, person_to_edit, place_in_tree_view = None):
-           if self.card:
-               self.card.stop()
+        is_reading = False
 
-           add_edit_dialoge = member_window.Window(self.glade_file)
-           result,new_member = add_edit_dialoge.run(person_to_edit)
+        if self.card and not self.card.stopped:
+            is_reading = True
+            self.card.stop()
 
-           if (result == gtk.RESPONSE_OK and new_member):
-               self.show_members([new_member])
+        add_edit_dialoge = member_window.Window(self.glade_file)
+        result,new_member = add_edit_dialoge.run(person_to_edit)
 
-           if(self.card and not self.card.stopped):
-               self.card.start()
+        if (result == gtk.RESPONSE_OK and new_member):
+            self.show_members([new_member])
+        
+        if(is_reading):
+            self.card.start()
 
 
     def reading_card_result(self, input):
-        label = self.builder.get_object("reading_card_label")
-        statusbar = self.builder.get_object("statusbar")
         if(self.blink):
             self.blink = False
-            statusbar.push(1,"reading")
-            #label.set_label("")
+            self.statusbar.push(1,"reading")
         else:
             self.blink = True
-            statusbar.pop(1)
-            #label.set_label("reading")
+            self.statusbar.pop(1)
         print input
 
 
     def on_card_found(self, cardnumber):
+        self.statusbar.pop(1)
         person = Person.get_by_cardnumber(cardnumber)
         person_list = list(person)
         if len(person_list):
-            person_list[0].swipe_now()
+            person_list[0].add_date()
             print "Member found :" + str(person_list[0].id)
-            gobject.idle_add(self.start_edit_dialoge,person_list[0])
+            gobject.idle_add(self.start_edit_dialoge, person_list[0])
         else:
             print "No Member with cardnumber : " + cardnumber
 
@@ -199,21 +202,16 @@ class Window:
             print("No card reader")
             return
 
-        statusbar = self.builder.get_object("statusbar")
-
         button = self.builder.get_object("start_stop_button")
         if self.card.stopped:
-            statusbar.push(1,"reading")
             print "Start"
             button.set_label("Stop RFID reader")
             self.card.start()
         else:
-            statusbar.pop(1)
+            self.statusbar.pop(1)
             print "Stop"
             button.set_label("Start RFID reader")
             self.card.stop()
-
-
 
 
     def quit(self, widget):

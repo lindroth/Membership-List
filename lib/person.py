@@ -58,7 +58,7 @@ class Person(SQLObject):
     def get_column_types():
         return Person.column_types
   
-    def swipe_now(self):
+    def add_date(self):
         time_now = datetime.datetime.now()
         Swipe(person = self, date = time_now)
 
@@ -71,7 +71,7 @@ class Person(SQLObject):
 
     @staticmethod
     def get_by_cardnumber(number):
-        return Person.select(Person.q.cardnumber == cardnumber)
+        return Person.select(Person.q.cardnumber == number)
 
     def to_array(self):
         if self.gender:
