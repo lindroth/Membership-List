@@ -71,7 +71,7 @@ class Person(SQLObject):
 
     @staticmethod
     def get_by_cardnumber(number):
-        return Person.select(Person.q.cardnumber == cardnumber)
+        return Person.select(Person.q.cardnumber == number)
 
     def to_array(self):
         if self.gender:
