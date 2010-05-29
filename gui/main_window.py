@@ -75,6 +75,9 @@ class Window:
         self.member_list = gtk.ListStore(*Person.get_column_types())
         self.member_tree_view.set_model(self.member_list)
 
+        #Class variables
+        self.statusbar = self.builder.get_object("statusbar")
+
         self.show_all_members()
 
         self.main_window = self.builder.get_object("main_window")
@@ -173,20 +176,17 @@ class Window:
 
 
     def reading_card_result(self, input):
-        label = self.builder.get_object("reading_card_label")
-        statusbar = self.builder.get_object("statusbar")
         if(self.blink):
             self.blink = False
-            statusbar.push(1,"reading")
-            #label.set_label("")
+            self.statusbar.push(1,"reading")
         else:
             self.blink = True
-            statusbar.pop(1)
-            #label.set_label("reading")
+            self.statusbar.pop(1)
         print input
 
 
     def on_card_found(self, cardnumber):
+        self.statusbar.pop(1)
         person = Person.get_by_cardnumber(cardnumber)
         person_list = list(person)
         if len(person_list):
@@ -202,21 +202,16 @@ class Window:
             print("No card reader")
             return
 
-        statusbar = self.builder.get_object("statusbar")
-
         button = self.builder.get_object("start_stop_button")
         if self.card.stopped:
-            statusbar.push(1,"reading")
             print "Start"
             button.set_label("Stop RFID reader")
             self.card.start()
         else:
-            statusbar.pop(1)
+            self.statusbar.pop(1)
             print "Stop"
             button.set_label("Start RFID reader")
             self.card.stop()
-
-
 
 
     def quit(self, widget):
