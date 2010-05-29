@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # This Python file uses the following encoding: utf-8
 import sys
 from lib.person import Person
@@ -8,28 +9,18 @@ filename = sys.argv[1]
 #sqlhub.processConnection = connectionForURI('sqlite:///'+ path +'new.db')
 
 
-Person.createTable(ifNotExists=True)
+#Person.createTable(ifNotExists=True)
 
 for line in open(filename,'r'):
     line = line.split(",")
 
-    if "0" in line[2]:
-        gender = False
-    else:
-        gender = True
-
-    if "1" in line[0]:
-        payed = True
-    else:
-        payed = False
-
-    Person(firstname = line[1],
-        lastname = line[3],
+    Person(firstname = line[0].strip(),
+        lastname = line[1].strip(),
         cardnumber = "",
-        payed = payed,
-        gender = gender,
-        birthdate = line[4],
-        streetname = line[5],
-        post_address = line[6],
-        email = line[7],
+        payed = False,
+        gender = 0,
+        birthdate = line[2].strip(),
+        streetname = "",
+        post_address = "",
+        email = line[3].strip(),
         sample = "")
