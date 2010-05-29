@@ -34,7 +34,7 @@ class RFID:
 
     def write(self,inputstring):
 	x = "ER1!"
-	self.serial.write("Db0106!CBAB6660000000000000000000000666!")
+	self.serial.write("Db0106" + inputstring + "!")
 	x = self.serial.readline(eol="!")
         pass
 
