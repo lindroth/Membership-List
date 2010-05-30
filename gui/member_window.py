@@ -104,18 +104,30 @@ class Window:
         if(self.result == gtk.RESPONSE_OK):
             #If this is on add and not edit we need to create a person
             if(not self.person):
-                self.person = Person()
-
-            self.person.firstname = firstname_entry.get_text()
-            self.person.lastname = lastname_entry.get_text()
-            self.person.email = email_entry.get_text()
-            self.person.birthdate = birthdate_entry.get_text()
-            self.person.streetname = streetname_entry.get_text()
-            self.person.post_address = post_address_entry.get_text()
-            self.person.cardnumber = cardnumber_entry.get_text()
-            self.person.gender = radio_male.get_active()
-            self.person.payed = payed.get_active()
-            self.person.sample = None
+                self.person = Person(
+                    firstname = firstname_entry.get_text(),
+                    lastname = lastname_entry.get_text(),
+                    email = email_entry.get_text(),
+                    birthdate = birthdate_entry.get_text(),
+                    streetname = streetname_entry.get_text(),
+                    post_address = post_address_entry.get_text(),
+                    cardnumber = cardnumber_entry.get_text(),
+                    gender = radio_male.get_active(),
+                    payed = payed.get_active(),
+                    sample = None
+                )
+	                    
+            else:
+                self.person.firstname = firstname_entry.get_text()
+                self.person.lastname = lastname_entry.get_text()
+                self.person.email = email_entry.get_text()
+                self.person.birthdate = birthdate_entry.get_text()
+                self.person.streetname = streetname_entry.get_text()
+                self.person.post_address = post_address_entry.get_text()
+                self.person.cardnumber = cardnumber_entry.get_text()
+                self.person.gender = radio_male.get_active()
+                self.person.payed = payed.get_active()
+                self.person.sample = None
 
         self.store_member.destroy()
 
